@@ -7,17 +7,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff7f8;--card:#ffffff;--text:#3b2a30;--muted:#8a6f77;--accent:#c2587a;--accent2:#e8b4c4;--line:#f0d5dd;
+:root{--bg:#fff6f6;--card:#ffffff;--text:#3a1418;--muted:#8a5a60;--accent:#a50f20;--accent2:#f2c6ca;--line:#f0d0d3;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1a20;--card:#38242c;--text:#fbeaf0;--muted:#c9a4b0;--accent:#ee8fae;--accent2:#7a3a50;--line:#55343f}}
-:root[data-theme="dark"]{--bg:#2a1a20;--card:#38242c;--text:#fbeaf0;--muted:#c9a4b0;--accent:#ee8fae;--accent2:#7a3a50;--line:#55343f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a0d11;--card:#3a1419;--text:#fdeaea;--muted:#d0a0a6;--accent:#d93a4b;--accent2:#7a1f2b;--line:#5a2530}}
+:root[data-theme="dark"]{--bg:#2a0d11;--card:#3a1419;--text:#fdeaea;--muted:#d0a0a6;--accent:#d93a4b;--accent2:#7a1f2b;--line:#5a2530}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Jost,system-ui,sans-serif;line-height:1.6;text-align:center}
-.hero{padding:72px 20px 56px;background:linear-gradient(180deg,var(--accent2),var(--bg))}
-.kicker{letter-spacing:.3em;text-transform:uppercase;font-size:.8rem;color:var(--muted)}
-h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(3rem,13vw,5.5rem);margin:.2em 0;color:var(--accent);line-height:1.05}
-.sub{font-size:1.15rem}
+.hero{padding:72px 20px 56px;background:#8b0f1d;border-bottom:4px solid #d4af37}
+.kicker{letter-spacing:.3em;text-transform:uppercase;font-size:.8rem;color:#f0d58a}
+h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(3rem,13vw,5.5rem);margin:.2em 0;color:#fff;line-height:1.05}
+.sub{font-size:1.15rem;color:#fff}
 section{max-width:620px;margin:0 auto;padding:36px 20px}
 h2{font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:1.8rem;margin:0 0 .6em}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin:12px 0}
@@ -75,7 +75,7 @@ footer{padding:30px 20px 50px;color:var(--muted);font-size:.9rem}
   </div>
 </section>
 
-<section id="donateSec" hidden>
+<section id="donateSec">
   <h2>A Gift</h2>
   <div class="card"><p class="muted" id="donateText"></p><a class="btn" id="donateLink" target="_blank" rel="noopener">Contribute</a></div>
 </section>
@@ -94,6 +94,7 @@ const INFO = {
   dress: "Formal",
   rsvpBy: "",
   family: "The Frausto Family",
+  sheetUrl: "https://script.google.com/macros/s/AKfycbyrqSweJq4VGX-RqVOLx9FZKXP4jMnWBQdZFeaLpHfQi8G7H5R69cj2WLFv_t1MqQlO/exec",   // paste your Google Apps Script web app URL here (RSVPs go to your Google Sheet)
   rsvpPhone: "+14805550123",  // RSVPs arrive as a text; leave "" to use email instead
   rsvpEmail: "family@example.com",
   donateUrl: "",   // paste a link (Venmo, GoFundMe...) to show a gift section
@@ -106,7 +107,8 @@ $('venue').textContent = INFO.venue; $('addr').textContent = INFO.address; $('dr
 $('deadline').textContent = INFO.rsvpBy; $('fam').textContent = INFO.family;
 if (!INFO.address) $('map').style.display = 'none';
 $('map').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(INFO.address);
-if (INFO.donateUrl) { $('donateSec').hidden = false; $('donateText').textContent = INFO.donateText; $('donateLink').href = INFO.donateUrl; }
+$('donateText').textContent = INFO.donateUrl ? INFO.donateText : 'Gift details coming soon.';
+if (INFO.donateUrl) $('donateLink').href = INFO.donateUrl; else $('donateLink').style.display = 'none';
 document.title = INFO.name + "’s Quinceañera";
 for (let i = 1; i <= 6; i++) { const o = document.createElement('option'); o.value = i; o.textContent = i; $('party').appendChild(o); }
 
@@ -121,19 +123,31 @@ document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
   $('more').style.display = answer === 'yes' ? '' : 'none';
 });
 
-$('send').onclick = () => {
+$('send').onclick = async () => {
   const msg = $('msg'), name = $('gname').value.trim();
   if (!name) { msg.textContent = 'Please enter your name.'; return; }
   if (!answer) { msg.textContent = 'Please choose yes or no.'; return; }
   const yes = answer === 'yes';
-  const lines = [INFO.name + "'s Quinceañera RSVP", 'Name: ' + name,
-    yes ? 'Attending: Yes, ' + $('party').value + ' guest(s)' : 'Attending: No'];
-  if (yes && $('diet').value.trim()) lines.push('Dietary needs: ' + $('diet').value.trim());
-  if ($('note').value.trim()) lines.push('Message: ' + $('note').value.trim());
+  const data = { name, attending: yes ? 'Yes' : 'No', party: yes ? +$('party').value : 0,
+    diet: yes ? $('diet').value.trim() : '', note: $('note').value.trim() };
+  if (INFO.sheetUrl) {
+    $('send').disabled = true;
+    try {
+      await fetch(INFO.sheetUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
+      msg.textContent = yes ? 'Thank you! We can’t wait to celebrate with you. ♡' : 'Thank you for letting us know. You’ll be missed! ♡';
+    } catch (e) {
+      $('send').disabled = false;
+      msg.textContent = 'Sorry, something went wrong. Please try again.';
+    }
+    return;
+  }
+  const lines = [INFO.name + ' Quinceañera RSVP', 'Name: ' + name, yes ? 'Attending: Yes, ' + data.party + ' guest(s)' : 'Attending: No'];
+  if (data.diet) lines.push('Dietary needs: ' + data.diet);
+  if (data.note) lines.push('Message: ' + data.note);
   const body = encodeURIComponent(lines.join('\n'));
   if (INFO.rsvpPhone) location.href = 'sms:' + INFO.rsvpPhone + '?&body=' + body;
   else location.href = 'mailto:' + INFO.rsvpEmail + '?subject=' + encodeURIComponent(INFO.name + ' RSVP') + '&body=' + body;
-  msg.textContent = 'Your messaging app should open. Just press send to confirm your RSVP! 💕';
+  msg.textContent = 'Your messaging app should open. Just press send to confirm your RSVP!';
 };
 </script>
 </body>
