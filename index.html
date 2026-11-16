@@ -57,10 +57,6 @@ footer{padding:20px 20px 50px;color:var(--muted);font-size:.9rem}
 .lang{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:300;display:flex;background:rgba(255,255,255,.93);border:1px solid #d6d6d6;border-radius:999px;padding:2px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 .lang button{border:0;background:transparent;color:#111;font:500 .72rem/1 Jost,system-ui,sans-serif;letter-spacing:.1em;padding:8px 11px;border-radius:999px;cursor:pointer}
 .lang button.on{background:#111;color:#fff}
-.mute{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:300;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid #d6d6d6;background:rgba(255,255,255,.93);box-shadow:0 2px 10px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.mute[hidden]{display:none}
-.mute svg{width:22px;height:22px;stroke:#111;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.mute .off{display:none}.mute.muted .on{display:none}.mute.muted .off{display:block}
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:250;pointer-events:none}
 
 body.lock{overflow:hidden;height:100%}
@@ -136,7 +132,6 @@ footer{padding:8px 20px 36px}
 </head>
 <body class="lock">
 <div class="lang" id="lang"><button type="button" data-l="en" class="on">EN</button><button type="button" data-l="es">ES</button></div>
-<button class="mute" id="mute" type="button" hidden aria-label="Mute music"><svg class="on" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M15.5 9a4.2 4.2 0 010 6M18 6.5a7.7 7.7 0 010 11"/></svg><svg class="off" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
 <canvas id="fx"></canvas>
 
 <div class="intro" id="intro">
@@ -267,7 +262,6 @@ function applyLang() {
   document.querySelectorAll('[data-i]').forEach(el => { el.innerHTML = T(el.getAttribute('data-i')); });
   if ($('seal')) $('seal').setAttribute('aria-label', T('sealLabel'));
   $('date').textContent = T('date'); $('place').textContent = INFO.place; $('fam').textContent = INFO.family[lang];
-  $('mute').setAttribute('aria-label', muted ? T('unmute') : T('mute'));
   document.querySelectorAll('#lang button').forEach(b => b.classList.toggle('on', b.getAttribute('data-l') === lang));
   const c = $('country'), other = I18N[lang === 'en' ? 'es' : 'en'].usa;
   if (!c.value || c.value === other) c.value = T('usa');
@@ -401,7 +395,7 @@ function schedule() {
     mNext += eighth; mStep++;
   }
 }
-function showMute() { $('mute').hidden = false; }
+function showMute() {}
 const SILENT = "data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUAGAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA";
 function wavUrl(f32, sr) {
   const n = f32.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
@@ -433,7 +427,7 @@ async function renderMusic() {
   if (peak > .9) for (let i = 0; i < out.length; i++) out[i] *= .9 / peak;
   return wavUrl(out, sr);
 }
-function showMute() { $('mute').hidden = false; }
+function showMute() {}
 function startRealtime() {
   try {
     const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
@@ -463,13 +457,6 @@ function startMusic() {
     }).catch(() => { audioEl = null; startRealtime(); });
   } catch (e) { audioEl = null; startRealtime(); showMute(); }
 }
-$('mute').addEventListener('click', () => {
-  muted = !muted; $('mute').classList.toggle('muted', muted); $('mute').setAttribute('aria-label', muted ? T('unmute') : T('mute'));
-  if (audioEl) { audioEl.muted = muted; return; }
-  if (!actx) return;
-  if (muted) { master.gain.setTargetAtTime(0, actx.currentTime, .12); setTimeout(() => { if (muted) actx.suspend(); }, 700); }
-  else { actx.resume(); master.gain.setTargetAtTime(.6, actx.currentTime, .2); }
-});
 document.addEventListener('visibilitychange', () => {
   if (audioEl) { if (document.hidden) audioEl.pause(); else if (!muted) audioEl.play().catch(() => {}); return; }
   if (!actx) return;
