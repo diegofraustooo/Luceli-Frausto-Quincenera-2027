@@ -382,10 +382,11 @@ let actx, master, bus, mTimer, mNext = 0, mStep = 0, audioEl;
 const CH = [[261.63, 329.63, 392, 523.25], [220, 261.63, 329.63, 440], [174.61, 220, 261.63, 349.23], [196, 246.94, 293.66, 392]];
 const MEL = [[659.25, 783.99], [659.25, 523.25], [698.46, 523.25], [587.33, 493.88]];
 const PAT = [0, 1, 2, 3, 2, 1, 2, 1];
-function tone(f, t, d, vol) {
-  const o = actx.createOscillator(), o2 = actx.createOscillator(), g = actx.createGain(), g2 = actx.createGain();
+function tone(f, t, d, vol, ctx, dst) {
+  ctx = ctx || actx; dst = dst || bus;
+  const o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain();
   o.frequency.value = f; o2.frequency.value = f * 4; g2.gain.value = .1;
-  o.connect(g); o2.connect(g2); g2.connect(g); g.connect(bus);
+  o.connect(g); o2.connect(g2); g2.connect(g); g.connect(dst);
   g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + d);
   o.start(t); o2.start(t); o.stop(t + d + .05); o2.stop(t + d + .05);
 }
@@ -401,9 +402,40 @@ function schedule() {
   }
 }
 function showMute() { $('mute').hidden = false; }
-function startMusic() {
+const SILENT = "data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUAGAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA";
+function wavUrl(f32, sr) {
+  const n = f32.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+  v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  w(36, 'data'); v.setUint32(40, n * 2, true);
+  for (let i = 0; i < n; i++) v.setInt16(44 + i * 2, Math.max(-1, Math.min(1, f32[i])) * 32767, true);
+  return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+}
+// Render the melody into an audio file once, then play it with a normal <audio> element.
+// Normal audio elements play on iPhones even when the ringer/silent switch is off.
+async function renderMusic() {
+  const sr = 44100, len = 16, tail = 5, OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  const oc = new OC(1, sr * (len + tail), sr), m = oc.createGain(), b = oc.createGain();
+  m.gain.value = .6; m.connect(oc.destination); b.connect(m);
+  const dl = oc.createDelay(1), fb = oc.createGain(), lp = oc.createBiquadFilter(), wet = oc.createGain();
+  dl.delayTime.value = .36; fb.gain.value = .4; lp.type = 'lowpass'; lp.frequency.value = 2200; wet.gain.value = .5;
+  b.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(wet); wet.connect(m);
+  for (let step = 0; step < 32; step++) {
+    const bar = Math.floor(step / 8) % 4, e = step % 8, t = step * .5;
+    tone(CH[bar][PAT[e]], t, 2.2, .15, oc, b);
+    if (e === 0) { tone(CH[bar][0] / 2, t, 3, .13, oc, b); tone(MEL[bar][0], t, 2.6, .17, oc, b); }
+    if (e === 4) tone(MEL[bar][1], t, 2.6, .15, oc, b);
+  }
+  const rendered = await oc.startRendering(), d = rendered.getChannelData(0), out = new Float32Array(sr * len);
+  let peak = 0;
+  for (let i = 0; i < out.length; i++) { out[i] = d[i] + (i < sr * tail ? d[sr * len + i] : 0); peak = Math.max(peak, Math.abs(out[i])); }
+  if (peak > .9) for (let i = 0; i < out.length; i++) out[i] *= .9 / peak;
+  return wavUrl(out, sr);
+}
+function showMute() { $('mute').hidden = false; }
+function startRealtime() {
   try {
-    if (INFO.musicUrl) { audioEl = new Audio(INFO.musicUrl); audioEl.loop = true; audioEl.volume = .55; audioEl.play().catch(() => {}); showMute(); return; }
     const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
     actx = new AC(); if (actx.resume) actx.resume();
     master = actx.createGain(); master.gain.value = 0; master.connect(actx.destination);
@@ -412,9 +444,24 @@ function startMusic() {
     dl.delayTime.value = .36; fb.gain.value = .4; lp.type = 'lowpass'; lp.frequency.value = 2200; wet.gain.value = .5;
     bus.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(wet); wet.connect(master);
     mNext = actx.currentTime + .1; schedule(); mTimer = setInterval(schedule, 120);
-    master.gain.setTargetAtTime(.6, actx.currentTime + .1, 1.2);
-    showMute();
+    master.gain.setTargetAtTime(muted ? 0 : .6, actx.currentTime + .1, 1.2);
   } catch (e) {}
+}
+function startMusic() {
+  try {
+    if (navigator.audioSession) navigator.audioSession.type = 'playback';   // iOS: use the media channel, not the ringer channel
+  } catch (e) {}
+  try {
+    audioEl = new Audio(); audioEl.loop = true; audioEl.setAttribute('playsinline', ''); audioEl.preload = 'auto';
+    audioEl.src = INFO.musicUrl || SILENT;                       // starting playback inside the tap unlocks audio on iPhones
+    audioEl.play().catch(() => {});
+    showMute();
+    if (INFO.musicUrl) return;
+    renderMusic().then(url => {
+      audioEl.src = url; audioEl.loop = true; audioEl.muted = muted;
+      if (!muted && !document.hidden) audioEl.play().catch(() => { audioEl = null; startRealtime(); });
+    }).catch(() => { audioEl = null; startRealtime(); });
+  } catch (e) { audioEl = null; startRealtime(); showMute(); }
 }
 $('mute').addEventListener('click', () => {
   muted = !muted; $('mute').classList.toggle('muted', muted); $('mute').setAttribute('aria-label', muted ? T('unmute') : T('mute'));
