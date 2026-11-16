@@ -134,6 +134,7 @@ footer{padding:8px 20px 36px}
 <div class="lang" id="lang"><button type="button" data-l="en" class="on">EN</button><button type="button" data-l="es">ES</button></div>
 <canvas id="fx"></canvas>
 
+<script>setTimeout(function(){if(!window.__ok){var i=document.getElementById("intro");if(i)i.style.display="none";document.body.classList.remove("lock");}},5000);</script>
 <div class="intro" id="intro">
   <div class="stage"><div class="env">
     <div class="letter"><small data-i="invited">You are invited</small><i class="rule"></i><b>Luceli’s XV</b><i class="rule"></i><span>11 · 20 · 27</span></div>
@@ -371,6 +372,8 @@ $('send').addEventListener('click', async () => {
 });
 try { const prev = localStorage.getItem('lx_done'); if (prev) showDone('already', prev); } catch (e) {}
 
+</script>
+<script>
 // ---------- Music (built-in music-box melody, or your own file via INFO.musicUrl) ----------
 let actx, master, bus, mTimer, mNext = 0, mStep = 0, audioEl;
 const CH = [[261.63, 329.63, 392, 523.25], [220, 261.63, 329.63, 440], [174.61, 220, 261.63, 349.23], [196, 246.94, 293.66, 392]];
@@ -463,6 +466,8 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) actx.suspend(); else if (!muted) actx.resume();
 });
 
+</script>
+<script>
 // ---------- Sparkles & confetti ----------
 const fx = $('fx'), cx = fx.getContext('2d');
 let P = [], fxOn = false, fxLast = 0;
@@ -510,6 +515,8 @@ function confetti() {
   fxGo();
 }
 
+</script>
+<script>
 // ---------- Envelope ----------
 const intro = $('intro'), fast = matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!fast) for (let i = 0; i < 22; i++) {
@@ -560,25 +567,27 @@ function run() {
     }
     cast.style.opacity = (.9 * Math.sin(fa * Math.PI / 180)).toFixed(3);
     if (fa > 90 && !back) { back = true; flap.style.zIndex = 0; }
-    if (t > 1.25 && !sparked) { sparked = true; sparkle(); }
+    if (t > 1.25 && !sparked) { sparked = true; try { sparkle(); } catch (e) {} }
     letter.style.transform = 'translate3d(0,' + (-52 * eo(seg(t, 1.05, 2.05))) + '%,0)';
     const e = eio(seg(t, .5, 1.9)), lv = eio(seg(t, 2.2, 3.1));
     env.style.transform = 'translate3d(0,' + (12 * e - 6 * lv) + '%,0) scale(' + (1 + .05 * e + 1.75 * lv) + ')';
     env.style.opacity = 1 - lv;
     intro.style.opacity = 1 - seg(t, 2.4, 3.1);
-    if (t > 2.2 && !shown) { shown = true; document.body.classList.add('in'); intro.style.pointerEvents = 'none'; confetti(); }
+    if (t > 2.2 && !shown) { shown = true; document.body.classList.add('in'); intro.style.pointerEvents = 'none'; try { confetti(); } catch (e) {} }
     if (t < 3.15) requestAnimationFrame(f); else finish();
   })(t0);
 }
 seal.addEventListener('click', () => {
   if (started) return; started = true;
-  startMusic();
+  try { if (typeof startMusic === 'function') startMusic(); } catch (e) {}
   if (navigator.vibrate) navigator.vibrate(12);
   intro.classList.add('peeling');
   if (fast) { document.body.classList.add('in'); finish(); return; }
   seal.style.animation = 'none';
-  requestAnimationFrame(run);
+  try { requestAnimationFrame(run); } catch (e) { document.body.classList.add('in'); finish(); }
+  setTimeout(() => { if (document.getElementById('intro')) { document.body.classList.add('in'); finish(); } }, 7000);
 });
+window.__ok = true;
 
 applyLang();
 </script>
