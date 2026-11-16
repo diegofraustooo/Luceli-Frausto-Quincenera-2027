@@ -148,7 +148,7 @@ footer{padding:8px 20px 36px}
 </div>
 <script>
 (function () {
-  var errs = []; window.__errs = errs; window.__ver = 'v25';
+  var errs = []; window.__errs = errs; window.__ver = 'v26';
   window.addEventListener('unhandledrejection', function (e) { errs.push('promise: ' + (e.reason && e.reason.message || e.reason)); });
   window.addEventListener('error', function (e) { errs.push((e.message || 'error') + ' @' + (e.lineno || '?')); });
   var s = document.getElementById('seal');
@@ -237,7 +237,7 @@ const INFO = {
   place: "Chandler, Arizona",
   family: { en: "The Frausto Family", es: "La Familia Frausto" },
   sheetUrl: "https://script.google.com/macros/s/AKfycbyrqSweJq4VGX-RqVOLx9FZKXP4jMnWBQdZFeaLpHfQi8G7H5R69cj2WLFv_t1MqQlO/exec",
-  musicUrl: ""   // optional: upload an .mp3 to the repository and put its file name here (e.g. "song.mp3") to play it instead of the built-in melody
+  musicUrl: "music.wav"   // the background music file in your repository (upload music.wav next to index.html)
 };
 // ==============================
 const I18N = {
@@ -392,98 +392,18 @@ try { const prev = localStorage.getItem('lx_done'); if (prev) showDone('already'
 window.__s1 = true;
 </script>
 <script>
-// ---------- Music (built-in music-box melody, or your own file via INFO.musicUrl) ----------
-let actx, master, bus, mTimer, mNext = 0, mStep = 0, audioEl;
-const CH = [[261.63, 329.63, 392, 523.25], [220, 261.63, 329.63, 440], [174.61, 220, 261.63, 349.23], [196, 246.94, 293.66, 392]];
-const MEL = [[659.25, 783.99], [659.25, 523.25], [698.46, 523.25], [587.33, 493.88]];
-const PAT = [0, 1, 2, 3, 2, 1, 2, 1];
-function tone(f, t, d, vol, ctx, dst) {
-  ctx = ctx || actx; dst = dst || bus;
-  const o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain();
-  o.frequency.value = f; o2.frequency.value = f * 4; g2.gain.value = .1;
-  o.connect(g); o2.connect(g2); g2.connect(g); g.connect(dst);
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + d);
-  o.start(t); o2.start(t); o.stop(t + d + .05); o2.stop(t + d + .05);
-}
-function schedule() {
-  const eighth = .5;
-  while (mNext < actx.currentTime + .5) {
-    const bar = Math.floor(mStep / 8) % 4, e = mStep % 8;
-    tone(CH[bar][PAT[e]], mNext, 2.2, .15);
-    if (e === 0) tone(CH[bar][0] / 2, mNext, 3, .13);
-    if (e === 0) tone(MEL[bar][0], mNext, 2.6, .17);
-    if (e === 4) tone(MEL[bar][1], mNext, 2.6, .15);
-    mNext += eighth; mStep++;
-  }
-}
-function showMute() {}
-const SILENT = "data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUAGAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA";
-function wavUrl(f32, sr) {
-  const n = f32.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
-  const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
-  w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
-  v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
-  w(36, 'data'); v.setUint32(40, n * 2, true);
-  for (let i = 0; i < n; i++) v.setInt16(44 + i * 2, Math.max(-1, Math.min(1, f32[i])) * 32767, true);
-  return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
-}
-// Render the melody into an audio file once, then play it with a normal <audio> element.
-// Normal audio elements play on iPhones even when the ringer/silent switch is off.
-async function renderMusic() {
-  const sr = 44100, len = 16, tail = 5, OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-  const oc = new OC(1, sr * (len + tail), sr), m = oc.createGain(), b = oc.createGain();
-  m.gain.value = .6; m.connect(oc.destination); b.connect(m);
-  const dl = oc.createDelay(1), fb = oc.createGain(), lp = oc.createBiquadFilter(), wet = oc.createGain();
-  dl.delayTime.value = .36; fb.gain.value = .4; lp.type = 'lowpass'; lp.frequency.value = 2200; wet.gain.value = .5;
-  b.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(wet); wet.connect(m);
-  for (let step = 0; step < 32; step++) {
-    const bar = Math.floor(step / 8) % 4, e = step % 8, t = step * .5;
-    tone(CH[bar][PAT[e]], t, 2.2, .15, oc, b);
-    if (e === 0) { tone(CH[bar][0] / 2, t, 3, .13, oc, b); tone(MEL[bar][0], t, 2.6, .17, oc, b); }
-    if (e === 4) tone(MEL[bar][1], t, 2.6, .15, oc, b);
-  }
-  const rendered = await oc.startRendering(), d = rendered.getChannelData(0), out = new Float32Array(sr * len);
-  let peak = 0;
-  for (let i = 0; i < out.length; i++) { out[i] = d[i] + (i < sr * tail ? d[sr * len + i] : 0); peak = Math.max(peak, Math.abs(out[i])); }
-  if (peak > .9) for (let i = 0; i < out.length; i++) out[i] *= .9 / peak;
-  return wavUrl(out, sr);
-}
-function showMute() {}
-function startRealtime() {
-  try {
-    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-    actx = new AC(); if (actx.resume) actx.resume();
-    master = actx.createGain(); master.gain.value = 0; master.connect(actx.destination);
-    bus = actx.createGain(); bus.connect(master);
-    const dl = actx.createDelay(1), fb = actx.createGain(), lp = actx.createBiquadFilter(), wet = actx.createGain();
-    dl.delayTime.value = .36; fb.gain.value = .4; lp.type = 'lowpass'; lp.frequency.value = 2200; wet.gain.value = .5;
-    bus.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(wet); wet.connect(master);
-    mNext = actx.currentTime + .1; schedule(); mTimer = setInterval(schedule, 120);
-    master.gain.setTargetAtTime(muted ? 0 : .6, actx.currentTime + .1, 1.2);
-  } catch (e) {}
-}
+// ---------- Music (a plain audio file: music.wav) ----------
+let audioEl;
 function startMusic() {
   try {
-    if (navigator.audioSession) navigator.audioSession.type = 'playback';   // iOS: use the media channel, not the ringer channel
+    audioEl = new Audio(INFO.musicUrl); audioEl.loop = true; audioEl.setAttribute('playsinline', '');
+    const p = audioEl.play(); if (p && p.catch) p.catch(() => {});
   } catch (e) {}
-  try {
-    audioEl = new Audio(); audioEl.loop = true; audioEl.setAttribute('playsinline', ''); audioEl.preload = 'auto';
-    audioEl.src = INFO.musicUrl || SILENT;                       // starting playback inside the tap unlocks audio on iPhones
-    audioEl.play().catch(() => {});
-    showMute();
-    if (INFO.musicUrl) return;
-    renderMusic().then(url => {
-      audioEl.src = url; audioEl.loop = true; audioEl.muted = muted;
-      if (!muted && !document.hidden) audioEl.play().catch(() => { audioEl = null; startRealtime(); });
-    }).catch(() => { audioEl = null; startRealtime(); });
-  } catch (e) { audioEl = null; startRealtime(); showMute(); }
 }
 document.addEventListener('visibilitychange', () => {
-  if (audioEl) { if (document.hidden) audioEl.pause(); else if (!muted) audioEl.play().catch(() => {}); return; }
-  if (!actx) return;
-  if (document.hidden) actx.suspend(); else if (!muted) actx.resume();
+  if (!audioEl) return;
+  if (document.hidden) audioEl.pause(); else audioEl.play().catch(() => {});
 });
-
 window.__s2 = true;
 </script>
 <script>
