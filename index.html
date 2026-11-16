@@ -96,6 +96,8 @@ background:linear-gradient(180deg,transparent calc(var(--fy) - 20px),rgba(0,0,0,
 box-shadow:inset 0 0 0 4px rgba(0,0,0,.6),inset 0 0 0 5px rgba(255,255,255,.16),inset 0 5px 9px rgba(255,255,255,.14),inset 0 -6px 10px rgba(0,0,0,.7);clip-path:inset(0 0 var(--fb) 0)}
 .s-base::before{content:"";position:absolute;inset:10px;border-radius:50%;border:1px solid rgba(255,255,255,.2);box-shadow:0 1px 1px rgba(0,0,0,.7),inset 0 1px 1px rgba(0,0,0,.7)}
 .s-flap{background:linear-gradient(180deg,#f0f0f0 var(--fy),#a4a4a4 calc(var(--fy) + 10px),#5e5e5e 100%);clip-path:inset(var(--fy) 0 0 0);transform-origin:50% var(--fy);transform:scaleY(-1)}
+.flapwrap,.flapwrap *,.cast,.pocketwrap,.pocketwrap *,.letter,.letter *,.s-mark,.s-w,.s-w *{pointer-events:none}
+.seal{touch-action:manipulation}
 .intro.peeling .seal::after{display:none}
 .intro.peeling .hint{opacity:0;animation:none}
 .hint{color:#c8c8c8;letter-spacing:.34em;text-transform:uppercase;font-size:.78rem;animation:pulse 2.2s ease-in-out infinite;transition:opacity .3s}
@@ -153,6 +155,11 @@ footer{padding:8px 20px 36px}
     setTimeout(function () {
       if (!window.__started) { var i = document.getElementById('intro'); if (i) i.remove(); document.body.classList.remove('lock'); document.body.classList.add('in'); }
     }, 1500);
+  });
+  var ii = document.getElementById('intro'), taps = 0;
+  if (ii) ii.addEventListener('click', function () {
+    taps++;
+    if (taps >= 3 && !window.__started) { ii.remove(); document.body.classList.remove('lock'); document.body.classList.add('in'); }
   });
   if (/[?&]debug/.test(location.search)) {
     var b = document.createElement('pre');
