@@ -148,13 +148,17 @@ footer{padding:8px 20px 36px}
 </div>
 <script>
 (function () {
-  var errs = []; window.__errs = errs;
+  var errs = []; window.__errs = errs; window.__ver = 'v25';
+  window.addEventListener('unhandledrejection', function (e) { errs.push('promise: ' + (e.reason && e.reason.message || e.reason)); });
   window.addEventListener('error', function (e) { errs.push((e.message || 'error') + ' @' + (e.lineno || '?')); });
   var s = document.getElementById('seal');
   if (s) s.addEventListener('click', function () {
     setTimeout(function () {
       if (!window.__started) { var i = document.getElementById('intro'); if (i) i.remove(); document.body.classList.remove('lock'); document.body.classList.add('in'); }
     }, 1500);
+    setTimeout(function () {
+      var i = document.getElementById('intro'); if (i) { i.remove(); document.body.classList.remove('lock'); document.body.classList.add('in'); }
+    }, 6000);
   });
   var ii = document.getElementById('intro'), taps = 0;
   if (ii) ii.addEventListener('click', function () {
@@ -166,7 +170,7 @@ footer{padding:8px 20px 36px}
     b.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99999;margin:0;padding:6px;font:11px/1.3 monospace;background:#fff;color:#c00;max-height:40vh;overflow:auto;white-space:pre-wrap;text-align:left';
     document.body.appendChild(b);
     document.addEventListener('click', function (e) { errs.push('click:' + (e.target.className && e.target.className.baseVal === undefined ? e.target.className : e.target.tagName)); }, true);
-    setInterval(function () { b.textContent = 'ok=' + !!window.__ok + ' started=' + !!window.__started + ' reduceMotion=' + matchMedia('(prefers-reduced-motion: reduce)').matches + '\n' + errs.join('\n') + '\n' + navigator.userAgent; }, 400);
+    setInterval(function () { b.textContent = window.__ver + ' core=' + !!window.__s1 + ' music=' + !!window.__s2 + ' fx=' + !!window.__s3 + ' envelope=' + !!window.__ok + ' started=' + !!window.__started + ' reduceMotion=' + matchMedia('(prefers-reduced-motion: reduce)').matches + '\n' + errs.join('\n') + '\n' + navigator.userAgent; }, 400);
   }
 })();
 </script>
@@ -385,6 +389,7 @@ $('send').addEventListener('click', async () => {
 });
 try { const prev = localStorage.getItem('lx_done'); if (prev) showDone('already', prev); } catch (e) {}
 
+window.__s1 = true;
 </script>
 <script>
 // ---------- Music (built-in music-box melody, or your own file via INFO.musicUrl) ----------
@@ -479,6 +484,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) actx.suspend(); else if (!muted) actx.resume();
 });
 
+window.__s2 = true;
 </script>
 <script>
 // ---------- Sparkles & confetti ----------
@@ -528,6 +534,7 @@ function confetti() {
   fxGo();
 }
 
+window.__s3 = true;
 </script>
 <script>
 // ---------- Envelope ----------
