@@ -180,7 +180,7 @@ footer{padding:8px 20px 36px}
   <p class="place" id="place"></p>
   <div class="cal">
     <span class="lbl" data-i="addcal"></span>
-    <button class="ghost" id="calIcs" type="button" data-i="calApple"></button>
+    <a class="ghost" id="calIcs" data-i="calApple"></a>
     <a class="ghost" id="calGoogle" target="_blank" rel="noopener" data-i="calGoogle"></a>
   </div>
   <hr>
@@ -287,6 +287,7 @@ function applyLang() {
   if (!c.value || c.value === other) c.value = T('usa');
   $('calGoogle').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(T('calTitle')) +
     '&dates=20271120/20271121&details=' + encodeURIComponent(T('calDesc')) + '&location=' + encodeURIComponent(INFO.place);
+  $('calIcs').href = lang === 'es' ? 'Lucelis-XV-es.ics' : 'Lucelis-XV.ics';
   renderDone(); tick();
 }
 document.querySelectorAll('#lang button').forEach(b => b.addEventListener('click', () => {
@@ -306,20 +307,6 @@ function tick() {
 setInterval(tick, 1000);
 
 // ---------- Add to calendar ----------
-$('calIcs').addEventListener('click', () => {
-  const esc = s => s.replace(/[,;]/g, '\\$&');
-  const stamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Luceli XV//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
-    'UID:luceli-xv-20271120@luceli-frausto-quinceanera', 'DTSTAMP:' + stamp, 'DTSTART;VALUE=DATE:20271120', 'DTEND;VALUE=DATE:20271121',
-    'SUMMARY:' + esc(T('calTitle')), 'DESCRIPTION:' + esc(T('calDesc')), 'LOCATION:' + esc(INFO.place), 'TRANSP:TRANSPARENT',
-    'BEGIN:VALARM', 'TRIGGER:-P7D', 'ACTION:DISPLAY', 'DESCRIPTION:' + esc(T('calTitle')), 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
-  const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  if (ios) { location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics); return; }
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
-  a.download = 'Lucelis-XV-Save-the-Date.ics';
-  document.body.appendChild(a); a.click(); a.remove();
-});
 
 // ---------- Address form ----------
 const US_CODES = 'AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY PR GU VI AS MP AA AE AP'.split(' ');
