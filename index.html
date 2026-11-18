@@ -18,7 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:light only;--bg:#ffffff;--card:#fafafa;--text:#111111;--muted:#666666;--accent:#111111;--onaccent:#ffffff;--line:#dddddd;
---grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .17 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+--grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 --grain-s:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .13 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 --grain-l:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .32 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -53,6 +53,7 @@ input.bad{border-color:#b3261e;box-shadow:0 0 0 1px #b3261e}
 #msg{margin-top:14px;min-height:1.4em;text-align:center}
 #msg.err{color:#b3261e}
 .done{text-align:center}.done .ghost{margin-top:6px}
+footer .heart{color:#d8112b}
 footer{padding:20px 20px 50px;color:var(--muted);font-size:.9rem}
 .lang{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:300;display:flex;background:rgba(255,255,255,.93);border:1px solid #d6d6d6;border-radius:999px;padding:2px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 .lang button{border:0;background:transparent;color:#111;font:500 .72rem/1 Jost,system-ui,sans-serif;letter-spacing:.1em;padding:8px 11px;border-radius:999px;cursor:pointer}
@@ -62,17 +63,13 @@ footer{padding:20px 20px 50px;color:var(--muted);font-size:.9rem}
 body.lock{overflow:hidden;height:100%}
 .intro{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;background:radial-gradient(ellipse at 50% 38%,#232323,#050505 72%);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;overflow:hidden}
 .intro.leave{opacity:0;pointer-events:none}
-.intro>i{position:absolute;width:var(--z);height:var(--z);border-radius:50%;background:#fff;opacity:0;pointer-events:none;animation:tw 3.4s ease-in-out var(--d) infinite}
-@keyframes tw{50%{opacity:.75}}
+.intro>i{position:absolute;width:var(--z);height:var(--z);border-radius:50%;background:#e6c25a;box-shadow:0 0 6px 1px rgba(230,194,90,.7);opacity:0;pointer-events:none;animation:tw 3.4s ease-in-out var(--d) infinite}
+@keyframes tw{50%{opacity:.95}}
 .stage{animation:float 4.5s ease-in-out infinite;will-change:transform}
 @keyframes float{50%{transform:translate3d(0,-8px,0)}}
-.env{position:relative;width:min(90vw,440px);aspect-ratio:3/2;perspective:1100px;background:#1b1b1b repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 2px,transparent 2px 11px);box-shadow:0 0 90px rgba(255,255,255,.07),0 34px 60px rgba(0,0,0,.75);will-change:transform}
-.letter{position:absolute;left:6%;width:88%;top:5%;height:92%;z-index:1;background:var(--grain-s) 0 0/160px 160px,#fff;color:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 2px 12px rgba(0,0,0,.25);will-change:transform}
-.letter::before{content:"";position:absolute;inset:9px;border:1px solid #d4d4d4}
-.letter small{letter-spacing:.32em;text-transform:uppercase;font-size:.68rem;color:#666}
-.letter .rule{width:34px;height:1px;background:#111;display:block;margin:2px 0}
-.letter b{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(1.9rem,9vw,2.7rem);line-height:1.15}
-.letter span{letter-spacing:.3em;font-size:.8rem;color:#444}
+.env{position:relative;width:min(90vw,440px);aspect-ratio:3/2;perspective:1100px;background:#f2f2f2 repeating-linear-gradient(45deg,rgba(0,0,0,.035) 0 2px,transparent 2px 11px);box-shadow:0 0 90px rgba(255,255,255,.16),0 34px 60px rgba(0,0,0,.75);will-change:transform}
+.letter{position:absolute;left:6%;width:88%;top:5%;z-index:1;background:#fff;padding:2.2%;box-shadow:0 2px 14px rgba(0,0,0,.28);will-change:transform}
+.letter img{display:block;width:100%;height:auto;aspect-ratio:1500/844;background:#fff}
 .flapwrap{position:absolute;left:0;top:0;width:100%;height:56.5%;z-index:3;transform-style:preserve-3d;-webkit-transform-style:preserve-3d}
 .fs{position:absolute;left:0;width:100%;height:calc(var(--sh) + .7px);transform-origin:50% 0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;will-change:transform}
 .fa,.fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
@@ -80,10 +77,10 @@ body.lock{overflow:hidden;height:100%}
 .sh{position:absolute;inset:0;background:#000;opacity:0}
 .cast{position:absolute;left:-1%;top:0;width:102%;height:60%;z-index:2;opacity:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 90%);clip-path:polygon(0 0,100% 0,50% 100%);filter:blur(3px)}
 .pocketwrap{position:absolute;inset:0;z-index:2;filter:drop-shadow(0 -3px 5px rgba(0,0,0,.3))}
-.pocket{position:absolute;inset:0;background:var(--grain) 0 0/160px 160px,linear-gradient(180deg,#e8e8e8,#fdfdfd 45%,#f1f1f1);clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
+.pocket{position:absolute;inset:0;background:var(--grain) 0 0/160px 160px,linear-gradient(180deg,#f7f7f7,#ffffff 45%,#fafafa);clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
 .seal{position:absolute;left:50%;top:56%;z-index:4;width:70px;height:70px;margin:-35px 0 0 -35px;border:0;padding:0;background:none;cursor:pointer;--fy:70px;--fb:0px;--wr:52% 48% 51% 49% / 49% 52% 48% 51%;animation:wig 2.8s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
 .seal::before{content:"";position:absolute;inset:-18px;border-radius:50%}
-.seal::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid #fff;pointer-events:none;animation:ring 2.4s ease-out infinite}
+.seal::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid #e6c25a;pointer-events:none;animation:ring 2.4s ease-out infinite}
 @keyframes ring{from{transform:scale(1);opacity:.7}to{transform:scale(1.9);opacity:0}}
 @keyframes wig{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
 .seal:focus-visible{outline:3px solid #fff;outline-offset:8px;border-radius:50%}
@@ -91,16 +88,16 @@ body.lock{overflow:hidden;height:100%}
 .s-mark,.s-w,.s-flap{display:block}
 .s-mark{background:rgba(0,0,0,.09);box-shadow:inset 0 0 0 2px rgba(0,0,0,.1)}
 .s-w{filter:drop-shadow(0 4px 5px rgba(0,0,0,.5))}
-.s-base{display:flex;align-items:center;justify-content:center;color:#e6e6e6;font-family:'Playfair Display',Georgia,serif;font-size:1.28rem;line-height:1;letter-spacing:.04em;padding-left:.04em;padding-top:2px;text-shadow:0 1px 0 rgba(255,255,255,.3),0 -1px 1px rgba(0,0,0,.9);
+.s-base{display:flex;align-items:center;justify-content:center;color:#e3b94f;font-family:'Playfair Display',Georgia,serif;font-size:1.28rem;line-height:1;letter-spacing:.04em;padding-left:.04em;padding-top:2px;text-shadow:0 1px 0 rgba(255,236,170,.55),0 -1px 1px rgba(0,0,0,.9),0 0 8px rgba(227,185,79,.35);
 background:linear-gradient(180deg,transparent calc(var(--fy) - 20px),rgba(0,0,0,.55) var(--fy)),var(--grain-l) 0 0/90px 90px,radial-gradient(circle at 30% 23%,rgba(255,255,255,.4),transparent 34%),radial-gradient(circle at 36% 30%,#555,#191919 52%,#050505);
 box-shadow:inset 0 0 0 4px rgba(0,0,0,.6),inset 0 0 0 5px rgba(255,255,255,.16),inset 0 5px 9px rgba(255,255,255,.14),inset 0 -6px 10px rgba(0,0,0,.7);clip-path:inset(0 0 var(--fb) 0)}
-.s-base::before{content:"";position:absolute;inset:10px;border-radius:50%;border:1px solid rgba(255,255,255,.2);box-shadow:0 1px 1px rgba(0,0,0,.7),inset 0 1px 1px rgba(0,0,0,.7)}
+.s-base::before{content:"";position:absolute;inset:10px;border-radius:50%;border:1px solid rgba(227,185,79,.45);box-shadow:0 1px 1px rgba(0,0,0,.7),inset 0 1px 1px rgba(0,0,0,.7)}
 .s-flap{background:linear-gradient(180deg,#f0f0f0 var(--fy),#a4a4a4 calc(var(--fy) + 10px),#5e5e5e 100%);clip-path:inset(var(--fy) 0 0 0);transform-origin:50% var(--fy);transform:scaleY(-1)}
 .flapwrap,.flapwrap *,.cast,.pocketwrap,.pocketwrap *,.letter,.letter *,.s-mark,.s-w,.s-w *{pointer-events:none}
 .seal{touch-action:manipulation}
 .intro.peeling .seal::after{display:none}
 .intro.peeling .hint{opacity:0;animation:none}
-.hint{color:#c8c8c8;letter-spacing:.34em;text-transform:uppercase;font-size:.78rem;animation:pulse 2.2s ease-in-out infinite;transition:opacity .3s}
+.hint{color:#fff;letter-spacing:.34em;text-transform:uppercase;font-size:.78rem;animation:pulse 2.2s ease-in-out infinite;transition:opacity .3s}
 .intro.open .hint{opacity:0;animation:none}
 @keyframes pulse{50%{opacity:.35}}
 @media (prefers-reduced-motion:reduce){.intro,.intro *{transition:none!important;animation:none!important}}
@@ -133,7 +130,7 @@ footer{padding:8px 20px 36px}
 <script>setTimeout(function(){if(!window.__ok){var i=document.getElementById("intro");if(i)i.style.display="none";document.body.classList.remove("lock");}},5000);</script>
 <div class="intro" id="intro">
   <div class="stage"><div class="env">
-    <div class="letter"><small data-i="invited">You are invited</small><i class="rule"></i><b>Luceli’s XV</b><i class="rule"></i><span>11 · 20 · 27</span></div>
+    <div class="letter"><img id="letterImg" width="1500" height="844" alt=""></div>
     <div class="pocketwrap"><div class="pocket"></div></div>
     <div class="cast"></div><div class="flapwrap"></div>
     <button class="seal" id="seal" type="button" aria-label="Open the invitation"><span class="s-mark"></span><span class="s-w"><span class="s-base">XV</span></span><span class="s-w"><span class="s-flap"></span></span></button>
@@ -142,7 +139,7 @@ footer{padding:8px 20px 36px}
 </div>
 <script>
 (function () {
-  var errs = []; window.__errs = errs; window.__ver = 'v27';
+  var errs = []; window.__errs = errs; window.__ver = 'v28';
   window.addEventListener('unhandledrejection', function (e) { errs.push('promise: ' + (e.reason && e.reason.message || e.reason)); });
   window.addEventListener('error', function (e) { errs.push((e.message || 'error') + ' @' + (e.lineno || '?')); });
   var s = document.getElementById('seal');
@@ -209,6 +206,8 @@ footer{padding:8px 20px 36px}
       </div>
       <label for="country" data-i="fCountry"></label>
       <input id="country" maxlength="60" autocomplete="country-name">
+      <label for="phone" data-i="fPhone"></label>
+      <input id="phone" type="tel" inputmode="tel" maxlength="30" autocomplete="tel">
       <label for="note" data-i="fNote"></label>
       <textarea id="note" rows="4" maxlength="400"></textarea>
       <div class="hp" aria-hidden="true"><input id="hp_field" name="hp_field" type="text" tabindex="-1" autocomplete="off"></div>
@@ -222,7 +221,7 @@ footer{padding:8px 20px 36px}
   </div>
 </section>
 
-<footer><span data-i="love"></span> <span id="fam"></span> ♡</footer>
+<footer><span data-i="love"></span> <span id="fam"></span> <span class="heart">&#9829;&#xFE0E;</span></footer>
 
 <script>
 // ===== EDIT THESE DETAILS =====
@@ -244,10 +243,11 @@ const I18N = {
     calTitle: "Luceli’s XV (Save the Date)", calDesc: "Formal invitation to follow soon.",
     msg2: "Formal invitation to follow soon.<br>Please provide your current mailing address.",
     fName: "Name", fStreet1: "Street Address 1", fStreet2: "Street Address 2 <span>(optional)</span>", fCity: "City",
-    fState: "State / Province", fZip: "Zip / Postal Code", fCountry: "Country", fNote: "Message to Luceli <span>(optional)</span>",
+    fState: "State / Province", fZip: "Zip / Postal Code", fCountry: "Country", fPhone: "Phone Number", fNote: "Message to Luceli <span>(optional)</span>",
     submit: "Submit", sending: "Sending…", again: "Submit a different address",
     eRequired: "Please fill in the highlighted fields.", eName: "Please enter your full name.", eStreet: "Please enter your street address.",
     eCity: "Please enter your city.", eState: "Please enter a valid state (for example AZ).", eZip: "Please enter a valid 5-digit zip code.",
+    ePhone: "Please enter a valid phone number.",
     eNet: "Sorry, something went wrong. Please try again.",
     thanks: "Thank you, {n}!<br>We’ll send your formal invitation soon. ♡",
     already: "We already have your address, {n}.<br>Thank you! ♡",
@@ -262,10 +262,11 @@ const I18N = {
     calTitle: "XV de Luceli (Reserva la fecha)", calDesc: "La invitación formal llegará pronto.",
     msg2: "La invitación formal llegará pronto.<br>Por favor comparte tu dirección postal actual.",
     fName: "Nombre", fStreet1: "Dirección (línea 1)", fStreet2: "Dirección (línea 2) <span>(opcional)</span>", fCity: "Ciudad",
-    fState: "Estado / Provincia", fZip: "Código postal", fCountry: "País", fNote: "Mensaje para Luceli <span>(opcional)</span>",
+    fState: "Estado / Provincia", fZip: "Código postal", fCountry: "País", fPhone: "Número de teléfono", fNote: "Mensaje para Luceli <span>(opcional)</span>",
     submit: "Enviar", sending: "Enviando…", again: "Enviar otra dirección",
     eRequired: "Por favor completa los campos marcados.", eName: "Por favor ingresa tu nombre completo.", eStreet: "Por favor ingresa tu dirección.",
     eCity: "Por favor ingresa tu ciudad.", eState: "Ingresa un estado válido (por ejemplo AZ).", eZip: "Ingresa un código postal válido de 5 dígitos.",
+    ePhone: "Ingresa un número de teléfono válido.",
     eNet: "Lo sentimos, algo salió mal. Inténtalo de nuevo.",
     thanks: "¡Gracias, {n}!<br>Pronto enviaremos tu invitación formal. ♡",
     already: "Ya tenemos tu dirección, {n}.<br>¡Gracias! ♡",
@@ -321,7 +322,7 @@ const clean = s => s.replace(/\s+/g, ' ').trim();
 
 function validate(d) {
   const bad = [], mark = ids => ids.forEach(i => { $(i).classList.add('bad'); bad.push(i); });
-  ['name', 'street1', 'city', 'state', 'zip', 'country'].forEach(i => { if (!d[i]) mark([i]); });
+  ['name', 'street1', 'city', 'state', 'zip', 'country', 'phone'].forEach(i => { if (!d[i]) mark([i]); });
   if (bad.length) return T('eRequired');
   if (d.name.length < 2 || !/[A-Za-zÀ-ÿ]/.test(d.name)) { mark(['name']); return T('eName'); }
   if (d.street1.length < 3) { mark(['street1']); return T('eStreet'); }
@@ -334,6 +335,8 @@ function validate(d) {
     if (d.state.length < 2) { mark(['state']); return T('eState'); }
     if (d.zip.length < 3) { mark(['zip']); return T('eZip'); }
   }
+  const dg = d.phone.replace(/\D/g, '');
+  if (!/^[\d\s()+.\-x]+$/i.test(d.phone) || dg.length < 7 || dg.length > 15 || (isUS(d.country) && !(dg.length === 10 || (dg.length === 11 && dg[0] === '1')))) { mark(['phone']); return T('ePhone'); }
   return '';
 }
 function renderDone() {
@@ -364,7 +367,7 @@ $('send').addEventListener('click', async () => {
   msg.className = ''; msg.textContent = '';
   document.querySelectorAll('input.bad').forEach(x => x.classList.remove('bad'));
   const data = { name: v('name'), street1: v('street1'), street2: v('street2'), city: v('city'),
-    state: v('state'), zip: v('zip'), country: v('country'), note: $('note').value.trim(),
+    state: v('state'), zip: v('zip'), country: v('country'), phone: v('phone'), note: $('note').value.trim(),
     hp: $('hp_field').value, t: Date.now() - loadedAt };
   if (/^[a-z]{2}$/i.test(data.state)) data.state = data.state.toUpperCase();
   const err = validate(data);
@@ -418,7 +421,7 @@ function fxLoop(now) {
   for (const p of P) {
     if (p.k === 's') {
       p.x += p.vx * dt; p.y += p.vy * dt;
-      cx.globalAlpha = Math.sin(Math.PI * p.life / p.max); cx.fillStyle = '#fff'; cx.shadowColor = '#fff'; cx.shadowBlur = 8;
+      cx.globalAlpha = Math.sin(Math.PI * p.life / p.max); cx.fillStyle = p.col; cx.shadowColor = p.col; cx.shadowBlur = 9;
       starPath(p.x, p.y, p.r * (.6 + .4 * Math.sin(p.life * 9 + p.rot)), p.rot);
       cx.shadowBlur = 0;
     } else {
@@ -437,11 +440,11 @@ function fxGo() { if (fxOn) return; fxOn = true; fxLast = 0; requestAnimationFra
 function sparkle() {
   const b = env.getBoundingClientRect();
   for (let i = 0; i < 34; i++) P.push({ k: 's', x: b.left + Math.random() * b.width, y: b.top - b.height * .15 + Math.random() * b.height * .7,
-    r: 3 + Math.random() * 7, life: 0, max: 1.1 + Math.random() * 1.1, vx: (Math.random() - .5) * 10, vy: -4 - Math.random() * 12, rot: Math.random() });
+    r: 3 + Math.random() * 7, life: 0, max: 1.1 + Math.random() * 1.1, vx: (Math.random() - .5) * 10, vy: -4 - Math.random() * 12, rot: Math.random(), col: ['#d4af37', '#e6c25a', '#f3dc8a'][i % 3] });
   fxGo();
 }
 function confetti() {
-  const cols = ['#111111', '#444444', '#8a8a8a', '#c9c9c9', '#ffffff', '#111111', '#ffffff'];
+  const cols = ['#d4af37', '#9caf88', '#f4a8c0', '#9b7ed0', '#e6c25a', '#b2c2a0', '#ec8fb0', '#b69be3'];   // gold, sage, pink, purple
   for (let i = 0; i < 90; i++) P.push({ k: 'c', x: Math.random() * innerWidth, y: -20 - Math.random() * innerHeight * .35,
     w: 5 + Math.random() * 5, h: 8 + Math.random() * 7, vx: (Math.random() - .5) * 40, vy: 70 + Math.random() * 120, rot: Math.random() * 6.28,
     vr: (Math.random() - .5) * 8, sw: Math.random() * 6.28, col: cols[i % cols.length], life: 0, max: 4 + Math.random() * 1.6 });
@@ -458,6 +461,7 @@ if (!fast) for (let i = 0; i < 22; i++) {
   s.style.cssText = 'left:' + (Math.random() * 100) + '%;top:' + (Math.random() * 100) + '%;--d:' + (Math.random() * 3).toFixed(2) + 's;--z:' + (1 + Math.random() * 2).toFixed(1) + 'px';
   intro.appendChild(s);
 }
+try { $('letterImg').src = document.querySelector('.header img').src; } catch (e) {}
 const seal = $('seal'), env = document.querySelector('.env'), flap = document.querySelector('.flapwrap'), letter = document.querySelector('.letter');
 let started = false;
 const cast = document.querySelector('.cast'), N = 16, segs = [];
@@ -472,8 +476,8 @@ const cast = document.querySelector('.cast'), N = 16, segs = [];
     const cpb = 'clip-path:polygon(' + l1 + '% 0,' + (100 - l1) + '% 0,' + (100 - l0) + '% 100%,' + l0 + '% 100%);';
     const posb = 'background-size:160px 160px,100% ' + (N * 100) + '%;background-position:0 0,0 ' + ((1 - i / (N - 1)) * 100) + '%;';
     const pos = 'background-size:160px 160px,100% ' + (N * 100) + '%;background-position:0 0,0 ' + (i / (N - 1) * 100) + '%;';
-    d.innerHTML = '<div class="fa" style="' + cp + pos + 'background-image:var(--grain),linear-gradient(180deg,#cfcfcf,#f6f6f6 85%)"><i class="sh"></i></div>' +
-                  '<div class="fb" style="' + cpb + posb + 'background-image:var(--grain),linear-gradient(0deg,#9c9c9c,#d4d4d4)"><i class="sh"></i></div>';
+    d.innerHTML = '<div class="fa" style="' + cp + pos + 'background-image:var(--grain),linear-gradient(180deg,#ececec,#ffffff 85%)"><i class="sh"></i></div>' +
+                  '<div class="fb" style="' + cpb + posb + 'background-image:var(--grain),linear-gradient(0deg,#dcdcdc,#f6f6f6)"><i class="sh"></i></div>';
     par.appendChild(d); segs.push(d); par = d;
   }
 })();
@@ -510,13 +514,13 @@ function run() {
       const a = i === 0 ? fa : bump * 5 * (i / (N - 1));
       cum += a;
       segs[i].style.transform = 'rotateX(' + a + 'deg)';
-      const o = (.42 * Math.abs(Math.sin(cum * Math.PI / 180))).toFixed(3);
+      const o = (.30 * Math.abs(Math.sin(cum * Math.PI / 180))).toFixed(3);
       segs[i].children[0].firstChild.style.opacity = o; segs[i].children[1].firstChild.style.opacity = o;
     }
     cast.style.opacity = (.9 * Math.sin(fa * Math.PI / 180)).toFixed(3);
     if (fa > 90 && !back) { back = true; flap.style.zIndex = 0; }
     if (t > 1.25 && !sparked) { sparked = true; try { sparkle(); } catch (e) {} }
-    letter.style.transform = 'translate3d(0,' + (-52 * eo(seg(t, 1.05, 2.05))) + '%,0)';
+    letter.style.transform = 'translate3d(0,' + (-100 * eo(seg(t, 1.05, 2.05))) + '%,0)';
     const e = eio(seg(t, .5, 1.9)), lv = eio(seg(t, 2.2, 3.1));
     env.style.transform = 'translate3d(0,' + (12 * e - 6 * lv) + '%,0) scale(' + (1 + .05 * e + 1.75 * lv) + ')';
     env.style.opacity = 1 - lv;
