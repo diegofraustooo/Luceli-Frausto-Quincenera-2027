@@ -139,7 +139,7 @@ footer{padding:8px 20px 36px}
 </div>
 <script>
 (function () {
-  var errs = []; window.__errs = errs; window.__ver = 'v31';
+  var errs = []; window.__errs = errs; window.__ver = 'v33';
   window.addEventListener('unhandledrejection', function (e) { errs.push('promise: ' + (e.reason && e.reason.message || e.reason)); });
   window.addEventListener('error', function (e) { errs.push((e.message || 'error') + ' @' + (e.lineno || '?')); });
   var s = document.getElementById('seal');
@@ -161,7 +161,7 @@ footer{padding:8px 20px 36px}
     b.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99999;margin:0;padding:6px;font:11px/1.3 monospace;background:#fff;color:#c00;max-height:40vh;overflow:auto;white-space:pre-wrap;text-align:left';
     document.body.appendChild(b);
     document.addEventListener('click', function (e) { errs.push('click:' + (e.target.className && e.target.className.baseVal === undefined ? e.target.className : e.target.tagName)); }, true);
-    setInterval(function () { b.textContent = window.__ver + ' core=' + !!window.__s1 + ' music=' + !!window.__s2 + ' fx=' + !!window.__s3 + ' envelope=' + !!window.__ok + ' started=' + !!window.__started + ' reduceMotion=' + matchMedia('(prefers-reduced-motion: reduce)').matches + '\n' + errs.join('\n') + '\n' + navigator.userAgent; }, 400);
+    setInterval(function () { b.textContent = window.__ver + ' core=' + !!window.__s1 + ' music=' + !!window.__s2 + ' fx=' + !!window.__s3 + ' envelope=' + !!window.__ok + ' started=' + !!window.__started + ' audio=' + (window.__audio || 'not started') + ' reduceMotion=' + matchMedia('(prefers-reduced-motion: reduce)').matches + '\n' + errs.join('\n') + '\n' + navigator.userAgent; }, 400);
   }
 })();
 </script>
@@ -230,7 +230,7 @@ const INFO = {
   place: "Chandler, Arizona",
   family: { en: "The Frausto Family", es: "La Familia Frausto" },
   sheetUrl: "https://script.google.com/macros/s/AKfycbyrqSweJq4VGX-RqVOLx9FZKXP4jMnWBQdZFeaLpHfQi8G7H5R69cj2WLFv_t1MqQlO/exec",
-  musicUrl: "music.wav"   // the background music file in your repository (upload music.wav next to index.html)
+  musicUrl: "music.m4a"   // the background music file in your repository (upload music.wav next to index.html)
 };
 // ==============================
 const I18N = {
@@ -401,7 +401,9 @@ function startMusic() {
       audioEl.src = MUSIC_FILES[i++];
       const p = audioEl.play(); if (p && p.catch) p.catch(() => {});
     };
-    audioEl.addEventListener('error', next);
+    window.__audio = 'trying';
+    audioEl.addEventListener('error', () => { window.__audio = 'error on ' + audioEl.src.split('/').pop() + ' (code ' + (audioEl.error && audioEl.error.code) + ')'; next(); });
+    audioEl.addEventListener('playing', () => { window.__audio = 'playing ' + audioEl.src.split('/').pop(); });
     next();
   } catch (e) {}
 }
