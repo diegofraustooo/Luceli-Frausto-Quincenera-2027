@@ -139,7 +139,7 @@ footer{padding:8px 20px 36px}
 </div>
 <script>
 (function () {
-  var errs = []; window.__errs = errs; window.__ver = 'v30';
+  var errs = []; window.__errs = errs; window.__ver = 'v31';
   window.addEventListener('unhandledrejection', function (e) { errs.push('promise: ' + (e.reason && e.reason.message || e.reason)); });
   window.addEventListener('error', function (e) { errs.push((e.message || 'error') + ' @' + (e.lineno || '?')); });
   var s = document.getElementById('seal');
@@ -391,10 +391,18 @@ window.__s1 = true;
 <script>
 // ---------- Music (a plain audio file: music.wav) ----------
 let audioEl;
+const MUSIC_FILES = [INFO.musicUrl, 'music.m4a', 'music.mp3', 'music.aac', 'music.wav', 'music.ogg'].filter((v, i, a) => v && a.indexOf(v) === i);
 function startMusic() {
   try {
-    audioEl = new Audio(INFO.musicUrl); audioEl.loop = true; audioEl.setAttribute('playsinline', '');
-    const p = audioEl.play(); if (p && p.catch) p.catch(() => {});
+    let i = 0;
+    audioEl = new Audio(); audioEl.loop = true; audioEl.setAttribute('playsinline', '');
+    const next = () => {              // try each file name until one loads (the file's real extension matters on iPhone)
+      if (i >= MUSIC_FILES.length) return;
+      audioEl.src = MUSIC_FILES[i++];
+      const p = audioEl.play(); if (p && p.catch) p.catch(() => {});
+    };
+    audioEl.addEventListener('error', next);
+    next();
   } catch (e) {}
 }
 document.addEventListener('visibilitychange', () => {
