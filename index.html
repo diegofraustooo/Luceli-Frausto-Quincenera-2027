@@ -33,10 +33,12 @@ h2{font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:1.8rem
 .cd b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:2rem;font-weight:500;line-height:1.1}
 .cd span{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .label{letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;color:var(--muted);margin-top:10px}
-.msg-big{font-family:'Playfair Display',Georgia,serif;font-size:1.35rem;font-style:italic;line-height:1.6}
-.date{font-family:'Playfair Display',Georgia,serif;font-size:2rem;margin:0}
+.msg-big{font-family:Jost,system-ui,-apple-system,sans-serif;font-weight:400;font-size:1.1rem;font-style:normal;line-height:1.6;color:var(--text)}
+:root{--dfs:2rem;--g:12px}
+.date{font-family:'Playfair Display',Georgia,serif;font-size:var(--dfs);line-height:1.2;margin:0}
 .place{font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 hr{border:0;border-top:1px solid var(--line);max-width:80px;margin:8px auto}
+hr.hr-top{margin:8px auto var(--g)}hr.hr-bot{margin:calc(var(--g) + var(--dfs) * .26) auto 8px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin:16px 0;text-align:left}
 label{display:block;font-size:.9rem;margin:14px 0 4px;color:var(--muted)}
 input,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
@@ -109,10 +111,11 @@ section{padding:12px 18px}
 .cd b{font-size:1.6rem}
 .cd span{font-size:.65rem}
 .label{margin-top:6px;font-size:.7rem}
-.msg-big{font-size:1.08rem;line-height:1.45}
-.date{font-size:1.55rem;line-height:1.2}
+.msg-big{font-size:1rem;line-height:1.5}
+:root{--dfs:1.55rem;--g:10px}
 .place{font-size:.95rem;line-height:1.3}
 hr{margin:6px auto}
+hr.hr-top{margin:6px auto var(--g)}
 .card{padding:16px;margin:10px 0;border-radius:16px}
 label{margin:9px 0 3px;font-size:.85rem}
 input,textarea{padding:10px;font-size:16px}
@@ -139,7 +142,7 @@ footer{padding:8px 20px 36px}
 </div>
 <script>
 (function () {
-  var errs = []; window.__errs = errs; window.__ver = 'v33';
+  var errs = []; window.__errs = errs; window.__ver = 'v36';
   window.addEventListener('unhandledrejection', function (e) { errs.push('promise: ' + (e.reason && e.reason.message || e.reason)); });
   window.addEventListener('error', function (e) { errs.push((e.message || 'error') + ' @' + (e.lineno || '?')); });
   var s = document.getElementById('seal');
@@ -177,7 +180,7 @@ footer{padding:8px 20px 36px}
 </section>
 
 <section>
-  <hr>
+  <hr class="hr-top">
   <p class="date" id="date"></p>
   <p class="place" id="place"></p>
   <div class="cal">
@@ -185,7 +188,7 @@ footer{padding:8px 20px 36px}
     <a class="ghost" id="calIcs" data-i="calApple"></a>
     <a class="ghost" id="calGoogle" target="_blank" rel="noopener" data-i="calGoogle"></a>
   </div>
-  <hr>
+  <hr class="hr-bot">
 </section>
 
 <section>
@@ -226,7 +229,7 @@ footer{padding:8px 20px 36px}
 <script>
 // ===== EDIT THESE DETAILS =====
 const INFO = {
-  dateISO: "2027-11-20T17:00:00",
+  dateISO: "2027-11-20T17:00:00-07:00",   // 5:00 PM Arizona time (Arizona doesn't use daylight saving, so it's always UTC-7)
   place: "Chandler, Arizona",
   family: { en: "The Frausto Family", es: "La Familia Frausto" },
   sheetUrl: "https://script.google.com/macros/s/AKfycbyrqSweJq4VGX-RqVOLx9FZKXP4jMnWBQdZFeaLpHfQi8G7H5R69cj2WLFv_t1MqQlO/exec",
