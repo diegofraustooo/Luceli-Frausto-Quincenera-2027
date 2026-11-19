@@ -35,6 +35,7 @@ h2{font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:1.8rem
 .label{letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;color:var(--muted);margin-top:10px}
 .msg-big{font-family:'Playfair Display',Georgia,serif;font-size:1.35rem;font-style:italic;line-height:1.6}
 .msg-big .pl{font-family:Jost,system-ui,-apple-system,sans-serif;font-weight:400;font-style:normal;font-size:1.1rem}
+.msg-big .sp{display:inline-block;margin-top:6px;font-family:Jost,system-ui,-apple-system,sans-serif;font-style:normal;font-weight:400;font-size:1rem;line-height:1.7;letter-spacing:.1em;color:var(--muted)}
 :root{--dfs:2rem;--g:12px}
 .date{font-family:'Playfair Display',Georgia,serif;font-size:var(--dfs);line-height:1.2;margin:0}
 .place{font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -114,6 +115,7 @@ section{padding:12px 18px}
 .label{margin-top:6px;font-size:.7rem}
 .msg-big{font-size:1.08rem;line-height:1.45}
 .msg-big .pl{font-size:1rem}
+.msg-big .sp{font-size:.88rem;letter-spacing:.08em;line-height:1.65}
 :root{--dfs:1.55rem;--g:10px}
 .place{font-size:.95rem;line-height:1.3}
 hr{margin:6px auto}
@@ -144,7 +146,7 @@ footer{padding:8px 20px 36px}
 </div>
 <script>
 (function () {
-  var errs = []; window.__errs = errs; window.__ver = 'v37';
+  var errs = []; window.__errs = errs; window.__ver = 'v38';
   window.addEventListener('unhandledrejection', function (e) { errs.push('promise: ' + (e.reason && e.reason.message || e.reason)); });
   window.addEventListener('error', function (e) { errs.push((e.message || 'error') + ' @' + (e.lineno || '?')); });
   var s = document.getElementById('seal');
@@ -242,11 +244,11 @@ const I18N = {
   en: {
     invited: "You are invited", hint: "Tap the seal to open", sealLabel: "Open the invitation",
     days: "Days", hours: "Hours", min: "Min", sec: "Sec", until: "until we celebrate", celebrate: "Let’s celebrate!",
-    msg1: "<span class=\"pl\">We are grateful for your presence as we celebrate this special milestone.</span><br>Please save the date for Luceli’s quinceañera celebration!",
+    msg1: "<span class=\"pl\">We are grateful for your presence as we celebrate this special milestone.</span><br><span class=\"sp\">Please save the date for Luceli’s quinceañera celebration!</span>",
     date: "Saturday, November 20, 2027",
     addcal: "Add to calendar", calApple: "Apple / Outlook", calGoogle: "Google",
     calTitle: "Luceli’s XV (Save the Date)", calDesc: "Formal invitation to follow soon.",
-    msg2: "<span class=\"pl\">Formal invitation to follow soon.</span><br>Please provide your current mailing address.",
+    msg2: "<span class=\"pl\">Formal invitation to follow soon.</span><br><span class=\"sp\">Please provide your current mailing address.</span>",
     fName: "Name", fStreet1: "Street Address 1", fStreet2: "Street Address 2 <span>(optional)</span>", fCity: "City",
     fState: "State / Province", fZip: "Zip / Postal Code", fCountry: "Country", fPhone: "Phone Number", fNote: "Message to Luceli <span>(optional)</span>",
     submit: "Submit", sending: "Sending…", again: "Submit a different address",
@@ -261,11 +263,11 @@ const I18N = {
   es: {
     invited: "Estás invitado(a)", hint: "Toca el sello para abrir", sealLabel: "Abrir la invitación",
     days: "Días", hours: "Horas", min: "Min", sec: "Seg", until: "para celebrar", celebrate: "¡A celebrar!",
-    msg1: "<span class=\"pl\">Agradecemos tu presencia al celebrar este momento tan especial.</span><br>¡Por favor reserva la fecha para la celebración de los quince años de Luceli!",
+    msg1: "<span class=\"pl\">Agradecemos tu presencia al celebrar este momento tan especial.</span><br><span class=\"sp\">¡Por favor reserva la fecha para la celebración de los quince años de Luceli!</span>",
     date: "Sábado, 20 de noviembre de 2027",
     addcal: "Agregar al calendario", calApple: "Apple / Outlook", calGoogle: "Google",
     calTitle: "XV de Luceli (Reserva la fecha)", calDesc: "La invitación formal llegará pronto.",
-    msg2: "<span class=\"pl\">La invitación formal llegará pronto.</span><br>Por favor comparte tu dirección postal actual.",
+    msg2: "<span class=\"pl\">La invitación formal llegará pronto.</span><br><span class=\"sp\">Por favor comparte tu dirección postal actual.</span>",
     fName: "Nombre", fStreet1: "Dirección (línea 1)", fStreet2: "Dirección (línea 2) <span>(opcional)</span>", fCity: "Ciudad",
     fState: "Estado / Provincia", fZip: "Código postal", fCountry: "País", fPhone: "Número de teléfono", fNote: "Mensaje para Luceli <span>(opcional)</span>",
     submit: "Enviar", sending: "Enviando…", again: "Enviar otra dirección",
